@@ -1,0 +1,35 @@
+{
+  "name": "vadr-threejs-vr",
+  "version": "1.0.0",
+  "description": "Analytics package for Threejs based VR applications by VadR",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "rollup": "./node_modules/rollup/bin/rollup -c -w"
+  },
+  "keywords": [
+    "VR",
+    "ThreeJs",
+    "WebVr"
+  ],
+  "author": "VadR Network Inc",
+  "license": "MIT",
+  "homepage": "https://vadr.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vadr-vr/VR-Analytics-Threejs.git"
+  },
+  "dependencies": {
+    "vadr-core-vr": "^1.0.2"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "rollup": "^0.51.8",
+    "rollup-plugin-babel": "^3.0.3",
+    "rollup-plugin-commonjs": "^8.2.6",
+    "rollup-plugin-json": "^2.3.0",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-uglify": "^2.0.1",
+    "uglify-es": "^3.3.2"
+  }
+}
