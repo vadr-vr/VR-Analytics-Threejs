@@ -129,7 +129,8 @@ const getGazePoint = () => {
     }
 
     threeCamera.getWorldDirection(cameraDirection);
-    raycaster.set(threeCamera.position, cameraDirection.multiplyScalar(-1));
+    threeCamera.getWorldPosition(cameraPosition);
+    raycaster.set(cameraPosition, cameraDirection);
     const intersects = raycaster.intersectObjects(scene.children, true);
 
     if (intersects.length > 0){
@@ -141,11 +142,11 @@ const getGazePoint = () => {
 
         intersectPoint.set(cameraDirection.x, cameraDirection.y, cameraDirection.z);
         intersectPoint.multiplyScalar(raycaster.far);
-        intersectPoint.add(threeCamera.position);
+        intersectPoint.add(cameraPosition);
 
     }
 
-    return _getVectorString(intersectPoint, false);
+    return _getVectorString(intersectPoint);
 
 };
 

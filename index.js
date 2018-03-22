@@ -3,10 +3,14 @@ import dataCollector from './js/collector';
 
 vadrCore.config.setSdk('Threejs');
 
+let isInit = false;
+let isVadrcoreInit = false;
 let lastTickUnix = 0;
 let timeSinceInit = 0;
 let timeDelta = 0;
 let vadrDate = Date;
+
+let appDetails, camera, scene;
 
 if (!vadrDate.now){
 
@@ -17,9 +21,7 @@ if (!vadrDate.now){
     };
 
 }
-appId, appToken, sceneId, testMode = false, version = '1.0.0'
 /**
- * 
  * @param {Object} appDetails app details 
  * @param {string} appDetails.appId app id provided by vadr 
  * @param {string} appDetails.appToken app token provided bby vadr
@@ -29,7 +31,12 @@ appId, appToken, sceneId, testMode = false, version = '1.0.0'
  * @param {Object} camera three.js camera object
  * @param {Object} scene three.js scene object
  */
-const init = (appDetails, camera, scene) => {
+const init = (newAppDetails, newCamera, newScene) => {
+
+    appDetails = newAppDetails;
+    camera = newCamera;
+    scene = newScene;
+    isInit = true;
 
     appDetails.version = appDetails.version ? appDetails.version : '1.0.0';
     appDetails.testMode = !!appDetails.testMode;
@@ -43,27 +50,24 @@ const init = (appDetails, camera, scene) => {
     vadrCore.setDataConfig.orientation(true, 300);
     vadrCore.setDataConfig.gaze(true, 300);
 
-    scene.addEventListener('camera-set-active', (event) => {
+    dataCollector.setCamera(camera);
+    // scene.addEventListener('camera-set-active', (event) => {
         
-        dataCollector.setCamera(event.detail.cameraEl);
+    //     dataCollector.setCamera(event.detail.cameraEl);
         
-    });
+    // });
 
-    scene.addEventListener('enter-vr', () => {
+    // scene.addEventListener('enter-vr', () => {
 
-        enterVR();
+    //     enterVR();
 
-    });
-    scene.addEventListener('exit-vr', () => {
+    // });
+    // scene.addEventListener('exit-vr', () => {
 
-        exitVR();
+    //     exitVR();
 
-    });
+    // });
         
-    lastTickUnix = vadrDate.now();
-    vadrCore.initVadRAnalytics();
-    vadrCore.scene.addScene(appDetails.sceneId);
-
 };
 
 const enterVR = () => {
@@ -92,22 +96,45 @@ const pause = () => {
 
 const tick = () => {
 
-    const timeDelta = vadrDate.now() - lastTickUnix;
-    timeSinceInit += timeDelta;
-    lastTickUnix += timeDelta;
+    if(isInit){
 
-    console.log('haha', timeSinceInit, timeDelta);
-    vadrCore.tick(timeSinceInit, timeDelta);
+        if (!isVadrcoreInit){
+
+            isVadrcoreInit = true;
+            lastTickUnix = vadrDate.now();
+            vadrCore.initVadRAnalytics();
+            vadrCore.scene.addScene(appDetails.sceneId);
+        
+        }else{
+
+            const timeDelta = vadrDate.now() - lastTickUnix;
+            timeSinceInit += timeDelta;
+            lastTickUnix += timeDelta;
+        
+            vadrCore.tick(timeSinceInit, timeDelta);
+
+        }
+
+    }
 
 };
 
-const remove = () => {
+const destroy = () => {
 
     vadrCore.destroy();
 
 };
 
 export default {
+    init: init,
+    tick: tick,
+    changeState: {
+        play: play,
+        pause: pause,
+        enterVR: enterVR,
+        exitVR: exitVR
+    },
+    destroy: destroy,
     setCamera: dataCollector.setCamera,
     user: vadrCore.user,
     setSessionInfo: vadrCore.setSessionInfo,
