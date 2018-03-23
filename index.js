@@ -2,6 +2,7 @@ import vadrCore from 'vadr-core-vr';
 import dataCollector from './js/collector';
 
 vadrCore.config.setSdk('Threejs');
+vadrCore.config.setRequestUrl('https://dev.vadr.io/analytics/api/v1.1/register/data/');
 
 let isInit = false;
 let isVadrcoreInit = false;
@@ -9,6 +10,7 @@ let lastTickUnix = 0;
 let timeSinceInit = 0;
 let timeDelta = 0;
 let vadrDate = Date;
+let appPaused = false;
 
 let appDetails, camera, scene;
 
@@ -37,7 +39,12 @@ const init = (newAppDetails, newCamera, newScene) => {
     camera = newCamera;
     scene = newScene;
     isInit = true;
-
+    isVadrcoreInit = false;
+    appPaused = false;
+    lastTickUnix = 0;
+    timeSinceInit = 0;
+    timeDelta = 0;
+    
     appDetails.version = appDetails.version ? appDetails.version : '1.0.0';
     appDetails.testMode = !!appDetails.testMode;
 
@@ -51,6 +58,11 @@ const init = (newAppDetails, newCamera, newScene) => {
     vadrCore.setDataConfig.gaze(true, 300);
 
     dataCollector.setCamera(camera);
+
+    // react to change of visibility
+    document.removeEventListener('visibilityChange', handeVisibilityChange);
+    document.addEventListener('visibilitychange', handeVisibilityChange);
+
     // scene.addEventListener('camera-set-active', (event) => {
         
     //     dataCollector.setCamera(event.detail.cameraEl);
@@ -84,12 +96,19 @@ const exitVR = () => {
 
 const play = () => {
 
-    vadrCore.playState.appInFocus();
+    if (appPaused){
+
+        vadrCore.playState.appInFocus();
+        appPaused = false;
+        lastTickUnix = vadrDate.now();
+
+    }
 
 };
 
 const pause = () => {
 
+    appPaused = true;
     vadrCore.playState.appOutOfFocus();
 
 };
@@ -121,9 +140,33 @@ const tick = () => {
 
 const destroy = () => {
 
+    appDetails = null;
+    camera = null;
+    scene = null;
+    isInit = false;
+    isVadrcoreInit = false;
+    lastTickUnix = 0;
+    timeSinceInit = 0;
+    timeDelta = 0;
     vadrCore.destroy();
 
 };
+
+const handeVisibilityChange = () => {
+
+    if (document.visibilityState == 'visible'){
+        
+        console.log('visible');
+        play();
+
+    }else{
+
+        console.log('hidden');
+        pause();
+
+    }
+
+}
 
 export default {
     init: init,

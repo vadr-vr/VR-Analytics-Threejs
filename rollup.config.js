@@ -28,6 +28,7 @@ export default {
         }),
         babel({
             exclude: 'node_modules/**',
+            // presets: ["es2015"]
         }),
         uglify({
             output: {
