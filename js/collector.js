@@ -17,8 +17,6 @@ let intersectPoint = new THREE.Vector3();
 let rotationQuaternion = new THREE.Quaternion();
 let rotationEuler = new THREE.Euler(0, 0, 0, 'YZX');
 
-let callbacksSet = false;
-
 /**
  * Sets the new camera to collect data
  * @memberof VadrObjects
@@ -27,9 +25,7 @@ let callbacksSet = false;
 const setCamera = (newCamera) => {
 
     threeCamera = newCamera;
-    
-    if (!callbacksSet)
-        setDataCallbacks();
+    setDataCallbacks();
 
 };
 
@@ -159,8 +155,6 @@ function setDataCallbacks(){
     vadrCore.dataCallbacks.setPositionCallback(getPosition);
     vadrCore.dataCallbacks.setGazeCallback(getGazePoint);
     vadrCore.dataCallbacks.setAngleCallback(getAngle);
-    
-    callbacksSet = true;
 
 }
 

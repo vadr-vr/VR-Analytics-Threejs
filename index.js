@@ -53,16 +53,6 @@ const init = (newAppDetails, newCamera, newScene) => {
     
     dataCollector.setScene(scene);
 
-    vadrCore.setDataConfig.performance(true, 1000);
-    vadrCore.setDataConfig.orientation(true, 300);
-    vadrCore.setDataConfig.gaze(true, 300);
-
-    dataCollector.setCamera(camera);
-
-    // react to change of visibility
-    document.removeEventListener('visibilityChange', handeVisibilityChange);
-    document.addEventListener('visibilitychange', handeVisibilityChange);
-
     // scene.addEventListener('camera-set-active', (event) => {
         
     //     dataCollector.setCamera(event.detail.cameraEl);
@@ -80,6 +70,22 @@ const init = (newAppDetails, newCamera, newScene) => {
 
     // });
         
+};
+
+// sets things which are reset on calling vadrCore.init
+// Thus this function needs to be called after vadrCore.init in the first tick function
+const initOnTick = () => {
+
+    vadrCore.setDataConfig.performance(true, 1000);
+    vadrCore.setDataConfig.orientation(true, 300);
+    vadrCore.setDataConfig.gaze(true, 300);
+
+    dataCollector.setCamera(camera);
+
+    // react to change of visibility
+    document.removeEventListener('visibilityChange', handeVisibilityChange);
+    document.addEventListener('visibilitychange', handeVisibilityChange);
+
 };
 
 const enterVR = () => {
@@ -122,6 +128,7 @@ const tick = () => {
             isVadrcoreInit = true;
             lastTickUnix = vadrDate.now();
             vadrCore.initVadRAnalytics();
+            initOnTick();
             vadrCore.scene.addScene(appDetails.sceneId);
         
         }else{
