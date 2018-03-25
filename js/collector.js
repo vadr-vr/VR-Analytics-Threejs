@@ -174,7 +174,6 @@ function destroy(){
 
     threeCamera = null;
     scene = null;
-    callbacksSet = false;
 
 }
 

@@ -2,7 +2,6 @@ import vadrCore from 'vadr-core-vr';
 import dataCollector from './js/collector';
 
 vadrCore.config.setSdk('Threejs');
-vadrCore.config.setRequestUrl('https://dev.vadr.io/analytics/api/v1.1/register/data/');
 
 let isInit = false;
 let isVadrcoreInit = false;
