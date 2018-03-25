@@ -51,6 +51,7 @@ const init = (newAppDetails, newCamera, newScene) => {
     vadrCore.config.setApplication(appDetails.appId, appDetails.appToken, appDetails.version);
     vadrCore.config.setTestMode(appDetails.testMode);
     
+    dataCollector.init();
     dataCollector.setScene(scene);
 
     // scene.addEventListener('camera-set-active', (event) => {
@@ -186,6 +187,7 @@ export default {
     },
     destroy: destroy,
     setCamera: dataCollector.setCamera,
+    setLongitudeZeroOffset: dataCollector.setLongitudeZeroOffset,
     user: vadrCore.user,
     setSessionInfo: vadrCore.setSessionInfo,
     setDataConfig: vadrCore.setDataConfig,
@@ -193,5 +195,6 @@ export default {
     scene: vadrCore.scene,
     registerEvent: vadrCore.registerEvent,
     playState: vadrCore.playState,
+    enums: vadrCore.enums,
     setLogLevel: vadrCore.setLogLevel
 };

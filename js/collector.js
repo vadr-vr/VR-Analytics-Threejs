@@ -17,6 +17,12 @@ let intersectPoint = new THREE.Vector3();
 let rotationQuaternion = new THREE.Quaternion();
 let rotationEuler = new THREE.Euler(0, 0, 0, 'YZX');
 
+
+function init(){
+
+    longitudeZeroOffset = 0;
+
+}
 /**
  * Sets the new camera to collect data
  * @memberof VadrObjects
@@ -28,6 +34,12 @@ const setCamera = (newCamera) => {
     setDataCallbacks();
 
 };
+
+const setLongitudeZeroOffset = (newOffset) => {
+
+    longitudeZeroOffset = newOffset;
+
+}
 
 const setScene = (newScene) => {
 
@@ -167,7 +179,9 @@ function destroy(){
 }
 
 export default {
+    init,
     setCamera,
+    setLongitudeZeroOffset,
     setScene,
     getGazePoint,
     getAngle,
