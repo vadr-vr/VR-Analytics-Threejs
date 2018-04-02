@@ -3,6 +3,8 @@ import dataCollector from './js/collector';
 
 vadrCore.config.setSdk('Threejs');
 
+let appDetails, camera, scene, appParams;
+
 let isInit = false;
 let isVadrcoreInit = false;
 let lastTickUnix = 0;
@@ -11,7 +13,6 @@ let timeDelta = 0;
 let vadrDate = Date;
 let appPaused = false;
 
-let appDetails, camera, scene;
 
 if (!vadrDate.now){
 
@@ -23,20 +24,23 @@ if (!vadrDate.now){
 
 }
 /**
- * @param {Object} appDetails app details 
- * @param {string} appDetails.appId app id provided by vadr 
- * @param {string} appDetails.appToken app token provided bby vadr
- * @param {string} appDetails.sceneId sceneId provided by vadr
- * @param {boolean} appDetails.testMode Should data be collected as test mode
- * @param {string} appDetails.version app version that you are collecting the data for
- * @param {Object} camera three.js camera object
- * @param {Object} scene three.js scene object
+ * @param {Object} newAppDetails app details 
+ * @param {string} newAppDetails.appId app id provided by vadr 
+ * @param {string} newAppDetails.appToken app token provided bby vadr
+ * @param {string} newAppDetails.sceneId sceneId provided by vadr
+ * @param {boolean} newAppDetails.testMode Should data be collected as test mode
+ * @param {string} newAppDetails.version app version that you are collecting the data for
+ * @param {Object} newCamera three.js camera object
+ * @param {Object} newScene three.js scene object
+ * @param {Object} params init params like which events to collect, event collection frequency etc.
  */
-const init = (newAppDetails, newCamera, newScene) => {
+const init = (newAppDetails, newCamera, newScene, params) => {
 
     appDetails = newAppDetails;
     camera = newCamera;
     scene = newScene;
+    appParams = params;
+
     isInit = true;
     isVadrcoreInit = false;
     appPaused = false;
@@ -52,23 +56,6 @@ const init = (newAppDetails, newCamera, newScene) => {
     
     dataCollector.init();
     dataCollector.setScene(scene);
-
-    // scene.addEventListener('camera-set-active', (event) => {
-        
-    //     dataCollector.setCamera(event.detail.cameraEl);
-        
-    // });
-
-    // scene.addEventListener('enter-vr', () => {
-
-    //     enterVR();
-
-    // });
-    // scene.addEventListener('exit-vr', () => {
-
-    //     exitVR();
-
-    // });
         
 };
 
@@ -76,15 +63,14 @@ const init = (newAppDetails, newCamera, newScene) => {
 // Thus this function needs to be called after vadrCore.init in the first tick function
 const initOnTick = () => {
 
-    vadrCore.setDataConfig.performance(true, 1000);
-    vadrCore.setDataConfig.orientation(true, 300);
-    vadrCore.setDataConfig.gaze(true, 300);
-
+    vadrCore.initVadRAnalytics(appParams);
     dataCollector.setCamera(camera);
+    vadrCore.scene.addScene(appDetails.sceneId);
 
     // react to change of visibility
     document.removeEventListener('visibilityChange', handeVisibilityChange);
     document.addEventListener('visibilitychange', handeVisibilityChange);
+
 
 };
 
@@ -127,9 +113,7 @@ const tick = () => {
 
             isVadrcoreInit = true;
             lastTickUnix = vadrDate.now();
-            vadrCore.initVadRAnalytics();
             initOnTick();
-            vadrCore.scene.addScene(appDetails.sceneId);
         
         }else{
 
@@ -163,12 +147,10 @@ const handeVisibilityChange = () => {
 
     if (document.visibilityState == 'visible'){
         
-        console.log('visible');
         play();
 
     }else{
 
-        console.log('hidden');
         pause();
 
     }
