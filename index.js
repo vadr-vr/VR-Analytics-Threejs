@@ -30,16 +30,16 @@ if (!vadrDate.now){
  * @param {string} newAppDetails.sceneId sceneId provided by vadr
  * @param {boolean} newAppDetails.testMode Should data be collected as test mode
  * @param {string} newAppDetails.version app version that you are collecting the data for
+ * @param {Object} params init params like which events to collect, event collection frequency etc.
  * @param {Object} newCamera three.js camera object
  * @param {Object} newScene three.js scene object
- * @param {Object} params init params like which events to collect, event collection frequency etc.
  */
-const init = (newAppDetails, newCamera, newScene, params) => {
+const init = (newAppDetails, params, newCamera, newScene) => {
 
     appDetails = newAppDetails;
+    appParams = params;
     camera = newCamera;
     scene = newScene;
-    appParams = params;
 
     isInit = true;
     isVadrcoreInit = false;
