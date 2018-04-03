@@ -1,5 +1,5 @@
 {
-  "name": "vadr-threejs-vr",
+  "name": "vadr-three-vr",
   "version": "1.0.0",
   "description": "Analytics package for Threejs based VR applications by VadR",
   "main": "index.js",
@@ -20,7 +20,7 @@
     "url": "https://github.com/vadr-vr/VR-Analytics-Threejs.git"
   },
   "dependencies": {
-    "vadr-core-vr": "^1.0.2"
+    "vadr-core-vr": "^1.0.5"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
