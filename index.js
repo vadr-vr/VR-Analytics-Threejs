@@ -175,7 +175,14 @@ export default {
     media: vadrCore.media,
     scene: vadrCore.scene,
     registerEvent: vadrCore.registerEvent,
-    playState: vadrCore.playState,
+    playState: {
+        appOutOfFocus: pause,
+        appInFocus: play,
+        headsetRemoved: vadrCore.playState.headsetRemoved,
+        headsetApplied: vadrCore.playState.headsetApplied,
+        pauseOnHeadsetRemove: vadrCore.playState.pauseOnHeadsetRemove,
+        dontPauseOnHeadsetRemove: vadrCore.playState.dontPauseOnHeadsetRemove,
+    },
     enums: vadrCore.enums,
     setLogLevel: vadrCore.setLogLevel
 };
