@@ -65,12 +65,20 @@ const initOnTick = () => {
 
     vadrCore.initVadRAnalytics(appParams);
     dataCollector.setCamera(camera);
-    vadrCore.scene.addScene(appDetails.sceneId);
+
+    if (appDetails.sceneId){
+
+        vadrCore.scene.addScene(appDetails.sceneId);
+
+    }else if(appDetails.sceneName){
+
+        vadrCore.scene.addScene(null, appDetails.sceneName);
+
+    }
 
     // react to change of visibility
     document.removeEventListener('visibilityChange', handeVisibilityChange);
     document.addEventListener('visibilitychange', handeVisibilityChange);
-
 
 };
 
