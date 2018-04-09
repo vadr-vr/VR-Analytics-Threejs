@@ -1,6 +1,6 @@
 {
   "name": "vadr-three-vr",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Analytics package for Threejs based VR applications by VadR",
   "main": "index.js",
   "scripts": {
