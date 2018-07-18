@@ -76,9 +76,14 @@ const initOnTick = () => {
 
     }
 
-    // react to change of visibility
     document.removeEventListener('visibilityChange', handeVisibilityChange);
-    document.addEventListener('visibilitychange', handeVisibilityChange);
+    
+    if (!appParams.ignoreWindowStateChange){
+
+        // react to change of visibility
+        document.addEventListener('visibilitychange', handeVisibilityChange);
+
+    }
 
 };
 
@@ -154,7 +159,7 @@ const destroy = () => {
 const handeVisibilityChange = () => {
 
     if (document.visibilityState == 'visible'){
-        
+
         play();
 
     }else{

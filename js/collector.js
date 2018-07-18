@@ -130,6 +130,20 @@ const getAngle = () => {
 
 };
 
+const _getUsefulIntersect = (intersects) => {
+
+    for (let i = 0; i < intersects.length; i++){
+
+        if (!intersects[i].object.userData.ignoreVadRRaycast){
+
+            return intersects[i];
+
+        }
+
+    }
+
+};
+
 const getGazePoint = () => {
 
     if (threeCamera == null){
@@ -141,10 +155,12 @@ const getGazePoint = () => {
     raycaster.set(cameraPosition, cameraDirection);
     const intersects = raycaster.intersectObjects(scene.children, true);
 
-    if (intersects.length > 0){
+    const usefulIntersect = _getUsefulIntersect(intersects);
 
-        intersectPoint.set(intersects[0].point.x, intersects[0].point.y,
-            intersects[0].point.z);
+    if (usefulIntersect){
+
+        intersectPoint.set(usefulIntersect.point.x, usefulIntersect.point.y,
+            usefulIntersect.point.z);
 
     } else{
 
